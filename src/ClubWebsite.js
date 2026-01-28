@@ -37,7 +37,13 @@ const isEventPast = (dateString, timeString) => {
 
     return now > eventDate;
 };
-
+const formatEventDate = (startDate, endDate) => {
+    if (startDate === endDate) {
+        return startDate;
+    } else {
+        return `${startDate} - ${endDate}`;
+    }
+};
 const EventModal = ({ event, onClose }) => {
     if (!event) return null;
 
@@ -68,7 +74,7 @@ const EventModal = ({ event, onClose }) => {
                     <div className="flex flex-wrap gap-4 mb-6">
                         <div className="flex items-center gap-2">
                             <Calendar className="w-5 h-5" style={{ color: '#812990' }} />
-                            <span className="text-gray-700 font-medium">{event.startDate} - {event.endDate}</span>
+                            <span className="text-gray-700 font-medium">{formatEventDate(event.startDate, event.endDate)}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <Clock className="w-5 h-5" style={{ color: '#812990' }} />
@@ -529,7 +535,7 @@ const ClubWebsite = () => {
                                                         </div>
                                                         <div>
                                                             <h3 className="text-2xl font-bold text-gray-900">{event.title}</h3>
-                                                            <p className="text-gray-500">{event.startDate} - {event.endDate} • {event.time}</p>
+                                                            <p className="text-gray-500">{formatEventDate(event.startDate, event.endDate)} • {event.time}</p>
                                                         </div>
                                                     </div>
                                                     <p className="text-gray-600 mb-4 line-clamp-2">{event.description}</p>
@@ -583,8 +589,7 @@ const ClubWebsite = () => {
                                                         </div>
                                                         <div>
                                                             <h3 className="text-2xl font-bold text-gray-900">{event.title}</h3>
-                                                            <p className="text-gray-500">{event.date} • {event.time}</p>
-                                                        </div>
+                                                            <p className="text-gray-500">{formatEventDate(event.startDate, event.endDate)} • {event.time}</p>                                                        </div>
                                                     </div>
                                                     <p className="text-gray-600 mb-4 line-clamp-2">{event.description}</p>
                                                     <div className="flex flex-wrap gap-2">
