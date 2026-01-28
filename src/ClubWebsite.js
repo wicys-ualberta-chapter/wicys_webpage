@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import logo from "./assets/logo.png";
+import discordIcon from "./assets/discordIcon.jpg";
+import instagramIcon from "./assets/instagramIcon.jpg";
+import linkedinIcon from "./assets/linkedinIcon.png";
+import rubricIcon from "./assets/rubricIcon.png";
 import { Menu, X, Users, Calendar, Trophy, MessageSquare, Award, BookOpen, ChevronRight, Sparkles, Zap, Target, ArrowRight } from 'lucide-react';
 
 const ClubWebsite = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('home');
-    const [stats, setStats] = useState({ students: 0, events: 0, winners: 0 });
+    const [stats, setStats] = useState({ students: 0, events: 0, community: 0 });
     const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
@@ -18,7 +22,7 @@ const ClubWebsite = () => {
 
     useEffect(() => {
         if (activeSection === 'home') {
-            const targets = { students: 250, events: 45, winners: 30 };
+            const targets = { students: 37, events: 7, community: 0 };
             const duration = 2000;
             const steps = 60;
             const interval = duration / steps;
@@ -31,7 +35,7 @@ const ClubWebsite = () => {
                 setStats({
                     students: Math.floor(targets.students * progress),
                     events: Math.floor(targets.events * progress),
-                    winners: Math.floor(targets.winners * progress)
+                    community: Math.floor(targets.community * progress)
                 });
 
                 if (currentStep >= steps) {
@@ -214,15 +218,15 @@ const ClubWebsite = () => {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
                                 <div className="text-center">
                                     <div className="text-7xl md:text-8xl font-bold mb-4" style={{ color: '#1976d2' }}>
-                                        {stats.students}+
+                                        {stats.students}
                                     </div>
-                                    <div className="text-xl md:text-2xl font-bold text-gray-800 mb-2">Students Helped</div>
-                                    <p className="text-gray-500">From beginners to advanced hackers</p>
+                                    <div className="text-xl md:text-2xl font-bold text-gray-800 mb-2">High School Students Helped</div>
+                                    <p className="text-gray-500">The next generation of cybersecurity professionals</p>
                                 </div>
 
                                 <div className="text-center">
                                     <div className="text-7xl md:text-8xl font-bold mb-4" style={{ color: '#1976d2' }}>
-                                        {stats.events}+
+                                        {stats.events}
                                     </div>
                                     <div className="text-xl md:text-2xl font-bold text-gray-800 mb-2">Events Hosted</div>
                                     <p className="text-gray-500">Workshops, CTFs, and meetups</p>
@@ -230,10 +234,10 @@ const ClubWebsite = () => {
 
                                 <div className="text-center">
                                     <div className="text-7xl md:text-8xl font-bold mb-4" style={{ color: '#1976d2' }}>
-                                        {stats.winners}+
+                                        {stats.community}
                                     </div>
-                                    <div className="text-xl md:text-2xl font-bold text-gray-800 mb-2">CTF Winners</div>
-                                    <p className="text-gray-500">Competition champions</p>
+                                    <div className="text-xl md:text-2xl font-bold text-gray-800 mb-2">Community Members Supported</div>
+                                    <p className="text-gray-500">Supporting lifelong learning in our community</p>
                                 </div>
                             </div>
                         </div>
@@ -261,7 +265,7 @@ const ClubWebsite = () => {
                                         <p className="text-xl text-purple-100 mb-6 max-w-lg">Challenge yourself with weekly capture the flag events. Compete with peers, solve complex security challenges, and climb the leaderboard.</p>
                                         <div className="flex items-center gap-8 text-white">
                                             <div>
-                                                <div className="text-4xl font-bold">{stats.winners}+</div>
+                                                <div className="text-4xl font-bold">{stats.community}+</div>
                                                 <div className="text-purple-200">Winners</div>
                                             </div>
                                             <div>
@@ -502,8 +506,367 @@ const ClubWebsite = () => {
                 </div>
             )}
 
+            {/* Getting Started Section */}
+            {activeSection === 'started' && (
+                <div className="pt-32 pb-20 bg-gradient-to-b from-gray-50 to-white">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        {/* Header */}
+                        <div className="text-center mb-16">
+                            <h1 className="text-5xl md:text-6xl font-bold mb-6 text-gray-900">Getting Started</h1>
+                            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                                Your complete guide to learning cybersecurity. Whether you're a beginner or looking to sharpen your skills, we've curated the best resources to help you on your journey.
+                            </p>
+                        </div>
+
+                        {/* Social Links */}
+                        <div className="flex justify-center gap-6 mb-20">
+                            <div className="flex items-start justify-center gap-4">
+                                <a
+                                    href="https://discord.gg/9pduz6bhE3"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:scale-110 transition-transform duration-300 w-24 flex flex-col items-center"
+                                    title="Join our Discord"
+                                >
+                                    <img
+                                        src={discordIcon}
+                                        alt="Discord"
+                                        className="w-16 h-16 object-contain rounded-xl shadow-lg hover:shadow-xl"
+                                    />
+                                    <span className="h-6 mt-2 text-sm text-gray-800 text-center"></span>
+                                </a>
+
+                                <button
+                                    onClick={() => setActiveSection("rubric")}
+                                    className="hover:scale-110 transition-transform duration-300 w-24 flex flex-col items-center"
+                                    title="Join as an official member"
+                                >
+                                    <img
+                                        src={rubricIcon}
+                                        alt="Join as an official member"
+                                        className="w-16 h-16 object-contain rounded-xl shadow-lg hover:shadow-xl"
+                                    />
+                                    <span className="h-6 mt-2 text-sm text-gray-800 text-center leading-tight">
+                                        Join as official member
+                                    </span>
+                                </button>
+
+                                <a
+                                    href="https://www.instagram.com/wicys.ualberta"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:scale-110 transition-transform duration-300 w-24 flex flex-col items-center"
+                                    title="Follow us on Instagram"
+                                >
+                                    <img
+                                        src={instagramIcon}
+                                        alt="Instagram"
+                                        className="w-16 h-16 object-contain rounded-xl shadow-lg hover:shadow-xl"
+                                    />
+                                    <span className="h-6 mt-2 text-sm text-gray-800 text-center"></span>
+                                </a>
+
+                                <a
+                                    href="https://www.linkedin.com/company/wicys-university-of-alberta-student-chapter"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:scale-110 transition-transform duration-300 w-24 flex flex-col items-center"
+                                    title="Connect on LinkedIn"
+                                >
+                                    <img
+                                        src={linkedinIcon}
+                                        alt="LinkedIn"
+                                        className="w-16 h-16 object-contain rounded-xl shadow-lg hover:shadow-xl"
+                                    />
+                                    <span className="h-6 mt-2 text-sm text-gray-800 text-center"></span>
+                                </a>
+                            </div>
+                        </div>
+
+                        {/* Resources Grid */}
+                        <div className="space-y-16">
+                            {/* VMs Section */}
+                            <div>
+                                <div className="flex items-center space-x-3 mb-8">
+                                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ background: 'linear-gradient(135deg, #812990 0%, #9d3ba8 100%)' }}>
+                                        <span className="text-white font-bold text-lg">🖥</span>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-3xl font-bold text-gray-900">Virtual Machines (VMs)</h2>
+                                        <p className="text-gray-600">Isolated environments to practice penetration testing safely and legally.</p>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    {[
+                                        { name: 'Kali Linux', description: 'Pre-loaded with 600+ security tools for ethical hacking and penetration testing.', link: 'https://www.kali.org/' },
+                                        { name: 'VulnHub', description: 'Download vulnerable VMs to practice real-world exploitation in a sandboxed environment.', link: 'https://www.vulnhub.com/' },
+                                        { name: 'Exploit.Education', description: 'VMs designed to teach a variety of computer security issues from basics to advanced.', link: 'https://exploit.education/' }
+                                    ].map((resource, i) => (
+                                        <a key={i} href={resource.link} target="_blank" rel="noopener noreferrer" className="block bg-white rounded-2xl p-6 shadow-md border border-gray-100 hover:shadow-lg hover:border-purple-200 transition-all duration-300 hover:-translate-y-1">
+                                            <h3 className="font-bold text-gray-900 mb-2">{resource.name}</h3>
+                                            <p className="text-sm text-gray-600">{resource.description}</p>
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Penetration Testing Tools */}
+                            <div>
+                                <div className="flex items-center space-x-3 mb-8">
+                                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: '#b7d14f' }}>
+                                        <span className="text-gray-900 font-bold text-lg">⚙</span>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-3xl font-bold text-gray-900">Penetration Testing Tools</h2>
+                                        <p className="text-gray-600">Essential utilities for network scanning, exploitation, and vulnerability assessment.</p>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    {[
+                                        { name: 'Nmap', description: 'Network scanner for discovering hosts, open ports, services, and vulnerabilities.', link: 'https://nmap.org/' },
+                                        { name: 'Metasploit', description: 'Exploit framework with a vast library for developing and executing attacks.', link: 'https://www.metasploit.com/' },
+                                        { name: 'Burp Suite', description: 'Web application security testing tool for finding vulnerabilities in web apps.', link: 'https://portswigger.net/burp' },
+                                        { name: 'Wireshark', description: 'Network protocol analyzer for capturing and inspecting packet-level traffic.', link: 'https://www.wireshark.org/' },
+                                        { name: 'Ghidra', description: 'Reverse engineering tool by the NSA for analyzing binary files and malware.', link: 'https://ghidra-sre.org/' },
+                                        { name: 'Pwntools', description: 'CTF framework for writing exploits and working with binary exploitation.', link: 'https://github.com/Gallopsled/pwntools' }
+                                    ].map((resource, i) => (
+                                        <a key={i} href={resource.link} target="_blank" rel="noopener noreferrer" className="block bg-white rounded-2xl p-6 shadow-md border border-gray-100 hover:shadow-lg hover:border-purple-200 transition-all duration-300 hover:-translate-y-1">
+                                            <h3 className="font-bold text-gray-900 mb-2">{resource.name}</h3>
+                                            <p className="text-sm text-gray-600">{resource.description}</p>
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* CTF Practice Platforms */}
+                            <div>
+                                <div className="flex items-center space-x-3 mb-8">
+                                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: '#1976d2' }}>
+                                        <span className="text-white font-bold text-lg">🚩</span>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-3xl font-bold text-gray-900">CTF Practice Platforms</h2>
+                                        <p className="text-gray-600">Hands-on platforms for practicing and competing in capture-the-flag challenges.</p>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    {[
+                                        { name: 'PicoCTF', description: 'Beginner-friendly CTF hosted by Carnegie Mellon. The largest CTF in the world.', link: 'https://picoctf.org/' },
+                                        { name: 'HackTheBox', description: 'Realistic penetration testing labs with machines at various difficulty levels.', link: 'https://www.hackthebox.com/' },
+                                        { name: 'TryHackMe', description: 'Structured learning paths and guided rooms for beginners to advanced players.', link: 'https://tryhackme.com/' },
+                                        { name: 'CTFLearn', description: 'Large collection of beginner-friendly challenges across cryptography, web, and binary.', link: 'https://ctflearn.com/' },
+                                        { name: 'OverTheWire', description: 'Classic wargames and challenges including the famous Bandit series for Linux.', link: 'https://overthewire.org/' },
+                                        { name: 'RootMe', description: 'Hacking and InfoSec learning platform with challenges and virtual labs.', link: 'https://www.root-me.org/' }
+                                    ].map((resource, i) => (
+                                        <a key={i} href={resource.link} target="_blank" rel="noopener noreferrer" className="block bg-white rounded-2xl p-6 shadow-md border border-gray-100 hover:shadow-lg hover:border-purple-200 transition-all duration-300 hover:-translate-y-1">
+                                            <h3 className="font-bold text-gray-900 mb-2">{resource.name}</h3>
+                                            <p className="text-sm text-gray-600">{resource.description}</p>
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Cybersecurity Learning Platforms */}
+                            <div>
+                                <div className="flex items-center space-x-3 mb-8">
+                                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ background: 'linear-gradient(135deg, #b7d14f 0%, #a0c43f 100%)' }}>
+                                        <span className="text-gray-900 font-bold text-lg">📚</span>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-3xl font-bold text-gray-900">Cybersecurity Learning Platforms</h2>
+                                        <p className="text-gray-600">Structured courses and learning environments for developing cybersecurity expertise.</p>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {[
+                                        { name: 'Network Academy', description: 'Cisco-created courses covering various areas of information security.', link: 'https://skillsforall.cisco.com/' },
+                                        { name: 'Pwn College', description: 'Comprehensive course for binary exploitation starting from basics to advanced.', link: 'https://pwn.college/' },
+                                        { name: 'PortSwigger Labs', description: 'Hands-on labs for learning web vulnerabilities and security testing.', link: 'https://portswigger.net/web-security' },
+                                        { name: 'CryptoHack', description: 'Interactive platform for learning cryptography through hands-on challenges.', link: 'https://cryptohack.org/' }
+                                    ].map((resource, i) => (
+                                        <a key={i} href={resource.link} target="_blank" rel="noopener noreferrer" className="block bg-white rounded-2xl p-6 shadow-md border border-gray-100 hover:shadow-lg hover:border-purple-200 transition-all duration-300 hover:-translate-y-1">
+                                            <h3 className="font-bold text-gray-900 mb-2">{resource.name}</h3>
+                                            <p className="text-sm text-gray-600">{resource.description}</p>
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Guides & References */}
+                            <div>
+                                <div className="flex items-center space-x-3 mb-8">
+                                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: '#FF6B6B' }}>
+                                        <span className="text-white font-bold text-lg">📖</span>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-3xl font-bold text-gray-900">Guides & References</h2>
+                                        <p className="text-gray-600">Comprehensive wikis and guides for understanding CTF concepts and techniques.</p>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    {[
+                                        { name: 'CTF101', description: 'Wiki and guidebook serving as a great introduction to CTF categories.', link: 'https://ctf101.org/' },
+                                        { name: 'CTF Wiki', description: 'Another comprehensive wiki with helpful CTF information and techniques.', link: 'https://ctf-wiki.mahaloz.re/' },
+                                        { name: 'CTF Field Guide', description: 'Useful guides covering basic skills needed for CTF competitions.', link: 'https://trailofbits.github.io/ctf/' },
+                                        { name: 'AwesomeCTF', description: 'Long list of resources, guides, and CTFs for practice across all topics.', link: 'https://github.com/apsdehal/awesome-ctf' },
+                                        { name: 'LiveOverflow', description: 'YouTube channel and website devoted to hacking, penetration testing, and CTFs.', link: 'https://liveoverflow.com/' },
+                                        { name: 'CTFTime Resources', description: 'Community-maintained guides with comprehensive information on CTF topics.', link: 'https://ctftime.org/' }
+                                    ].map((resource, i) => (
+                                        <a key={i} href={resource.link} target="_blank" rel="noopener noreferrer" className="block bg-white rounded-2xl p-6 shadow-md border border-gray-100 hover:shadow-lg hover:border-purple-200 transition-all duration-300 hover:-translate-y-1">
+                                            <h3 className="font-bold text-gray-900 mb-2">{resource.name}</h3>
+                                            <p className="text-sm text-gray-600">{resource.description}</p>
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* YouTube Channels */}
+                            <div>
+                                <div className="flex items-center space-x-3 mb-8">
+                                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: '#FF0000' }}>
+                                        <span className="text-white font-bold text-lg">📺</span>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-3xl font-bold text-gray-900">YouTube Channels</h2>
+                                        <p className="text-gray-600">Video tutorials and explanations for learning cybersecurity and CTF techniques.</p>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    {[
+                                        { name: 'LiveOverflow', description: 'In-depth tutorials on hacking, exploitation, and CTF walkthroughs.', link: 'https://www.youtube.com/@LiveOverflow' },
+                                        { name: 'John Hammond', description: 'Beginner-friendly guides explaining CTF concepts step-by-step clearly.', link: 'https://www.youtube.com/@_JohnHammond' },
+                                        { name: 'IppSec', description: 'Detailed video tutorials and walkthroughs of HackTheBox and other platforms.', link: 'https://www.youtube.com/@IppSec' },
+                                        { name: 'Network Chuck', description: 'Focus on networking and security fundamentals in information security field.', link: 'https://www.youtube.com/@NetworkChuck' }
+                                    ].map((resource, i) => (
+                                        <a key={i} href={resource.link} target="_blank" rel="noopener noreferrer" className="block bg-white rounded-2xl p-6 shadow-md border border-gray-100 hover:shadow-lg hover:border-purple-200 transition-all duration-300 hover:-translate-y-1">
+                                            <h3 className="font-bold text-gray-900 mb-2">{resource.name}</h3>
+                                            <p className="text-sm text-gray-600">{resource.description}</p>
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* CTF Tracking & Communities */}
+                            <div>
+                                <div className="flex items-center space-x-3 mb-8">
+                                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: '#4CAF50' }}>
+                                        <span className="text-white font-bold text-lg">🏆</span>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-3xl font-bold text-gray-900">CTF Tracking & Communities</h2>
+                                        <p className="text-gray-600">Follow competitions, track progress, and connect with the global CTF community.</p>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {[
+                                        { name: 'CTFTime', description: 'Track upcoming CTFs, create a team profile, and access an archive of past CTF writeups.', link: 'https://ctftime.org/' },
+                                        { name: 'Major League Cyber', description: 'Platform for creating a profile and tracking your progress in CTF competitions.', link: 'https://majorleaguecyber.org/' },
+                                        { name: 'WeChall', description: 'Another tracking site for monitoring your CTF progress and rankings.', link: 'https://www.wechall.net/' }
+                                    ].map((resource, i) => (
+                                        <a key={i} href={resource.link} target="_blank" rel="noopener noreferrer" className="block bg-white rounded-2xl p-6 shadow-md border border-gray-100 hover:shadow-lg hover:border-purple-200 transition-all duration-300 hover:-translate-y-1">
+                                            <h3 className="font-bold text-gray-900 mb-2">{resource.name}</h3>
+                                            <p className="text-sm text-gray-600">{resource.description}</p>
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Specialized Topics */}
+                            <div>
+                                <div className="flex items-center space-x-3 mb-8">
+                                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: '#9C27B0' }}>
+                                        <span className="text-white font-bold text-lg">🔬</span>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-3xl font-bold text-gray-900">Specialized Topics</h2>
+                                        <p className="text-gray-600">Deep dives into specific areas like cryptography, forensics, and reverse engineering.</p>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {[
+                                        { name: 'Cryptopals', description: 'Hands-on cryptography challenges and exercises for learning crypto basics.', link: 'https://cryptopals.com/' },
+                                        { name: 'Nightmare', description: 'In-depth guide covering binary exploitation and pwning with CTF examples.', link: 'https://github.com/guyinatuxedo/nightmare' },
+                                        { name: 'CyberChef', description: 'Web app for encryption, encoding, decoding, and data analysis on the fly.', link: 'https://gchq.github.io/CyberChef/' },
+                                        { name: 'Ciphey', description: 'Tool that automatically decrypts data and decodes encodings without knowing the key.', link: 'https://github.com/Ciphey/Ciphey' }
+                                    ].map((resource, i) => (
+                                        <a key={i} href={resource.link} target="_blank" rel="noopener noreferrer" className="block bg-white rounded-2xl p-6 shadow-md border border-gray-100 hover:shadow-lg hover:border-purple-200 transition-all duration-300 hover:-translate-y-1">
+                                            <h3 className="font-bold text-gray-900 mb-2">{resource.name}</h3>
+                                            <p className="text-sm text-gray-600">{resource.description}</p>
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* CTA Section */}
+                        <div className="mt-20 py-16 bg-gradient-to-br from-purple-50 to-green-50 rounded-3xl p-8 md:p-12 border border-purple-100">
+                            <div className="text-center">
+                                <h3 className="text-3xl font-bold text-gray-900 mb-4">Ready to Join the Community?</h3>
+                                <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+                                    Connect with fellow cybersecurity enthusiasts, participate in our CTFs, and gain recognition for your achievements.
+                                </p>
+                                <button
+                                    onClick={() => setActiveSection('rubric')}
+                                    className="px-10 py-4 rounded-2xl font-bold text-white transition-all duration-300 transform hover:scale-105 shadow-lg"
+                                    style={{ background: 'linear-gradient(135deg, #812990 0%, #9d3ba8 100%)' }}
+                                >
+                                    Become an Official Member
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Rubric Section */}
+            {activeSection === 'rubric' && (
+                <div className="pt-32 pb-20 bg-gradient-to-b from-gray-50 to-white">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="text-center mb-16">
+                            <h1 className="text-5xl md:text-6xl font-bold mb-6 text-gray-900">Join Our Community</h1>
+                            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+                                Ready to become part of the WiCyS UAlberta community? Whether you're a current student, alumni, faculty member, or cybersecurity enthusiast, we have a membership option for you.
+                            </p>
+                        </div>
+
+                        <div className="bg-gradient-to-br from-purple-50 to-green-50 rounded-3xl p-12 shadow-lg border border-purple-100">
+                            <div className="max-w-2xl mx-auto text-center">
+                                <h2 className="text-3xl font-bold text-gray-900 mb-6">Membership Options</h2>
+                                <p className="text-lg text-gray-600 mb-10">
+                                    Choose the membership level that's right for you:
+                                </p>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                                    <div className="bg-white rounded-2xl p-8 shadow-md border-2 border-purple-200">
+                                        <h3 className="text-2xl font-bold text-gray-900 mb-3">General Member</h3>
+                                        <p className="text-gray-600 mb-6">For University of Alberta students passionate about cybersecurity</p>
+                                        <Zap className="w-8 h-8 mx-auto" style={{ color: '#812990' }} />
+                                    </div>
+
+                                    <div className="bg-white rounded-2xl p-8 shadow-md border-2 border-green-200">
+                                        <h3 className="text-2xl font-bold text-gray-900 mb-3">Affiliate Member</h3>
+                                        <p className="text-gray-600 mb-6">For alumni, faculty, and non-affiliated cybersecurity students and professionals</p>
+                                        <Users className="w-8 h-8 mx-auto" style={{ color: '#b7d14f' }} />
+                                    </div>
+                                </div>
+
+                                <a
+                                    href="https://campus.hellorubric.com/?s=11472"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-block px-10 py-5 rounded-2xl font-bold text-white transition-all duration-300 transform hover:scale-105 shadow-xl"
+                                    style={{ background: 'linear-gradient(135deg, #812990 0%, #9d3ba8 100%)' }}
+                                >
+                                    Become a Member Today
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Other Sections */}
-            {['speakers', 'sponsors', 'started', 'rubric'].includes(activeSection) && (
+            {['speakers', 'sponsors'].includes(activeSection) && (
                 <div className="pt-32 pb-20 bg-gradient-to-b from-gray-50 to-white">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <h1 className="text-5xl md:text-6xl font-bold mb-8 text-gray-900">
