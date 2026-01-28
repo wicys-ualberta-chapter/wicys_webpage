@@ -1,0 +1,130 @@
+{
+    "events": [
+        {
+            "id": 1,
+            "title": "WiCyS Cross-Chapter CTF",
+            "startDate": "March 28, 2026",
+            "endDate": "March 29, 2026",
+            "time": "6:00 PM - 8:00 PM",
+            "location": "University of Alberta, Room TBD",
+            "tags": [
+                "CTF",
+                "Hybrid"
+            ],
+            "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80",
+            "description": "Join us for an intensive hands-on workshop covering the latest techniques in network security, ethical hacking, and threat detection. Perfect for all skill levels.",
+            "whatToExpect": [
+                "Live demonstrations of network scanning tools",
+                "Hands-on practice with Wireshark and Nmap",
+                "Common vulnerabilities and how to detect them",
+                "Q&A session with industry professionals"
+            ],
+            "requirements": "Laptop recommended. All software will be pre-installed on VMs provided."
+        },
+        {
+            "id": 2,
+            "title": "AI Hackers: Powered by Palo Alto",
+            "startDate": "February 3, 2026",
+            "endDate": "February 3, 2026",
+            "time": "3:30 PM - 5:30 PM",
+            "location": "In Person",
+            "tags": [
+                "Presentation",
+                "In Person"
+            ],
+            "image": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80",
+            "description": "Compete with fellow WiCyS members in our Winter CTF competition. Solve challenges across cryptography, web security, reverse engineering, and more.",
+            "whatToExpect": [
+                "15+ challenges across multiple categories",
+                "Real-time leaderboard tracking",
+                "Prizes for top 3 teams",
+                "Networking with cybersecurity professionals"
+            ],
+            "requirements": "Individual or team participation (up to 4 members). Basic CTF knowledge helpful but not required."
+        },
+        {
+            "id": 3,
+            "title": "WiCyS x UAIS: AI and Cybersecurity Presentation",
+            "startDate": "February 6, 2026",
+            "endDate": "February 6, 2026",
+            "time": "5:00 PM - 6:30 PM",
+            "location": "University of Alberta, ETLC E2-001",
+            "tags": [
+                "Presentation",
+                "In-Person"
+            ],
+            "image": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80",
+            "description": "Hear from industry professionals working in cybersecurity roles at leading organizations. Learn about career paths, skills in demand, and how to break into the industry.",
+            "whatToExpect": [
+                "Presentations from 3 cybersecurity professionals",
+                "Live Q&A session",
+                "Networking opportunity",
+                "Career advice and resume tips"
+            ],
+            "requirements": "Bring business cards if you have them! Light refreshments will be provided."
+        },
+        {
+            "id": 101,
+            "title": "Introduction to Web Security",
+            "startDate": "January 20, 2026",
+            "endDate": "January 20, 2026",
+            "time": "6:00 PM - 8:00 PM",
+            "location": "University of Alberta",
+            "tags": [
+                "Workshop",
+                "In-Person"
+            ],
+            "image": "https://images.unsplash.com/photo-1516321318423-f06f70d504f0?w=800&q=80",
+            "description": "An introductory workshop covering common web vulnerabilities like SQL injection, XSS, and CSRF attacks.",
+            "whatToExpect": [
+                "Basics of web security vulnerabilities",
+                "Hands-on lab environment",
+                "Real-world examples",
+                "Best practices for secure coding"
+            ],
+            "requirements": "None"
+        },
+        {
+            "id": 102,
+            "title": "Binary Exploitation Basics",
+            "startDate": "January 18, 2026",
+            "endDate": "January 18, 2026",
+            "time": "5:30 PM - 7:30 PM",
+            "location": "Online",
+            "tags": [
+                "Workshop",
+                "Online"
+            ],
+            "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80",
+            "description": "Introduction to binary exploitation, buffer overflows, and reverse engineering basics.",
+            "whatToExpect": [
+                "Reverse engineering fundamentals",
+                "Understanding assembly code",
+                "Buffer overflow demonstrations",
+                "Using GDB debugger"
+            ],
+            "requirements": "Linux knowledge helpful"
+        },
+        {
+            "id": 103,
+            "title": "First Meeting & Welcome",
+            "startDate": "January 11, 2025",
+            "endDate": "January 11, 2025",
+            "time": "6:00 PM - 7:00 PM",
+            "location": "University of Alberta",
+            "tags": [
+                "Meetup",
+                "In-Person"
+            ],
+            "image": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80",
+            "description": "Welcome to WiCyS UAlberta! Meet the team, learn about our club, and network with fellow cybersecurity enthusiasts.",
+            "whatToExpect": [
+                "Introduction to WiCyS and the club",
+                "Meet current leadership",
+                "Learn about upcoming events",
+                "Free pizza and networking"
+            ],
+            "requirements": "None"
+        }
+    ]
+}

@@ -4,13 +4,140 @@ import discordIcon from "./assets/discordIcon.jpg";
 import instagramIcon from "./assets/instagramIcon.jpg";
 import linkedinIcon from "./assets/linkedinIcon.png";
 import rubricIcon from "./assets/rubricIcon.png";
-import { Menu, X, Users, Calendar, Trophy, MessageSquare, Award, BookOpen, ChevronRight, Sparkles, Zap, Target, ArrowRight } from 'lucide-react';
+import { Menu, X, Users, Calendar, Trophy, MessageSquare, Award, BookOpen, ChevronRight, Sparkles, Zap, Target, ArrowRight, Clock, MapPin, Archive } from 'lucide-react';
+import eventsData from './data/events.json';
+
+const isEventPast = (dateString, timeString) => {
+    const [month, day, year] = dateString.split(' ').map((part, i) => {
+        if (i === 1) return parseInt(part.replace(',', ''));
+        if (i === 2) return parseInt(part);
+        return part;
+    });
+
+    const monthMap = {
+        'January': 0, 'February': 1, 'March': 2, 'April': 3, 'May': 4, 'June': 5,
+        'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11
+    };
+
+    const monthIndex = monthMap[month];
+    const timeStr = timeString.split(' - ')[0].trim();
+    const parts = timeStr.match(/(\d+):(\d+)\s(AM|PM)/);
+
+    if (!parts) return false; // if time format is invalid, assume not past
+
+    let hour = parseInt(parts[1]);
+    const minute = parseInt(parts[2]);
+    const period = parts[3];
+
+    if (period === 'PM' && hour !== 12) hour += 12;
+    if (period === 'AM' && hour === 12) hour = 0;
+
+    const eventDate = new Date(year, monthIndex, day, hour, minute);
+    const now = new Date();
+
+    return now > eventDate;
+};
+
+const EventModal = ({ event, onClose }) => {
+    if (!event) return null;
+
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+                <div className="sticky top-0 bg-white rounded-t-3xl p-6 border-b border-gray-100 flex justify-between items-center">
+                    <h2 className="text-2xl font-bold text-gray-900">{event.title}</h2>
+                    <button
+                        onClick={onClose}
+                        className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors duration-200"
+                    >
+                        <X size={24} className="text-gray-600" />
+                    </button>
+                </div>
+
+                <div className="p-6 md:p-8">
+                    {event.image && (
+                        <div className="mb-6 rounded-2xl overflow-hidden h-64 md:h-80 bg-gray-100">
+                            <img
+                                src={event.image}
+                                alt={event.title}
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                    )}
+
+                    <div className="flex flex-wrap gap-4 mb-6">
+                        <div className="flex items-center gap-2">
+                            <Calendar className="w-5 h-5" style={{ color: '#812990' }} />
+                            <span className="text-gray-700 font-medium">{event.startDate} - {event.endDate}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Clock className="w-5 h-5" style={{ color: '#812990' }} />
+                            <span className="text-gray-700 font-medium">{event.time}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <MapPin className="w-5 h-5" style={{ color: '#812990' }} />
+                            <span className="text-gray-700 font-medium">{event.location}</span>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 mb-6">
+                        {event.tags && event.tags.map((tag, i) => (
+                            <span key={i} className="px-3 py-1 rounded-full text-sm font-medium text-purple-700 bg-purple-100">
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
+
+                    <div className="mb-6">
+                        <h3 className="text-xl font-bold text-gray-900 mb-3">About This Event</h3>
+                        <p className="text-gray-600 leading-relaxed">{event.description}</p>
+                    </div>
+
+                    {event.whatToExpect && (
+                        <div className="mb-6">
+                            <h3 className="text-xl font-bold text-gray-900 mb-3">What to Expect</h3>
+                            <ul className="space-y-2">
+                                {event.whatToExpect.map((item, i) => (
+                                    <li key={i} className="flex items-start gap-3">
+                                        <span className="text-purple-600 font-bold mt-1">✓</span>
+                                        <span className="text-gray-600">{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    {event.requirements && (
+                        <div className="mb-6">
+                            <h3 className="text-xl font-bold text-gray-900 mb-3">Requirements</h3>
+                            <p className="text-gray-600">{event.requirements}</p>
+                        </div>
+                    )}
+
+                    {!isEventPast(event.endDate, event.time) ? (
+                        <button
+                            className="w-full px-6 py-4 rounded-2xl font-bold text-white transition-all duration-300 transform hover:scale-105 shadow-lg"
+                            style={{ background: 'linear-gradient(135deg, #812990 0%, #9d3ba8 100%)' }}
+                        >
+                            Register Now
+                        </button>
+                    ) : (
+                        <div className="w-full px-6 py-4 rounded-2xl font-bold text-gray-600 bg-gray-100 text-center">
+                            Event Completed
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
 
 const ClubWebsite = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('home');
     const [stats, setStats] = useState({ students: 0, events: 0, community: 0 });
     const [scrolled, setScrolled] = useState(false);
+    const [selectedEvent, setSelectedEvent] = useState(null);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -53,7 +180,6 @@ const ClubWebsite = () => {
         { name: 'Team', id: 'team' },
         { name: 'Events', id: 'events' },
         { name: 'CTFs', id: 'ctfs' },
-        { name: 'Speakers', id: 'speakers' },
         { name: 'Sponsors', id: 'sponsors' },
         { name: 'Getting Started', id: 'started' },
         { name: 'Rubric', id: 'rubric' }
@@ -75,12 +201,10 @@ const ClubWebsite = () => {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            {/* Navigation Bar */}
             <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-900 shadow-xl">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex w-full items-center h-16">
                         <div className="flex w-full items-center h-16">
-                            {/* LEFT: Logo */}
                             <div className="flex items-center space-x-3 flex-shrink-0">
                                 <img
                                     src={logo}
@@ -92,7 +216,6 @@ const ClubWebsite = () => {
                                 </span>
                             </div>
 
-                            {/* CENTER: Nav links */}
                             <div className="hidden lg:flex flex-1 justify-center items-center space-x-8">
                                 {navigation.map((item) => (
                                     <button
@@ -108,18 +231,6 @@ const ClubWebsite = () => {
                                 ))}
                             </div>
 
-                            {/* RIGHT: CTA */}
-                            <div className="hidden lg:flex flex-shrink-0">
-                                <button
-                                    onClick={() => setActiveSection("started")}
-                                    className="px-6 py-2.5 rounded-lg font-semibold text-white transition-all duration-300 hover:shadow-lg"
-                                    style={{ backgroundColor: "#1976d2" }}
-                                >
-                                    GET STARTED
-                                </button>
-                            </div>
-
-                            {/* MOBILE MENU */}
                             <div className="lg:hidden ml-auto">
                                 <button
                                     onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -132,7 +243,6 @@ const ClubWebsite = () => {
                     </div>
                 </div>
 
-                {/* Mobile Navigation */}
                 {isMenuOpen && (
                     <div className="lg:hidden bg-gray-800 border-t border-gray-700">
                         <div className="px-4 py-3 space-y-1">
@@ -156,10 +266,8 @@ const ClubWebsite = () => {
                 )}
             </nav>
 
-            {/* Home Section */}
             {activeSection === 'home' && (
                 <div className="pt-16">
-                    {/* Hero Section */}
                     <div className="relative overflow-hidden bg-gradient-to-br from-purple-50 via-white to-green-50">
                         <div className="absolute inset-0 overflow-hidden">
                             <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full opacity-20 blur-3xl" style={{ backgroundColor: '#812990' }}></div>
@@ -212,7 +320,6 @@ const ClubWebsite = () => {
                         </div>
                     </div>
 
-                    {/* Stats Section */}
                     <div className="py-20 bg-white">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
@@ -243,7 +350,6 @@ const ClubWebsite = () => {
                         </div>
                     </div>
 
-                    {/* Features Section */}
                     <div className="py-24 bg-gray-50">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                             <div className="text-center mb-20">
@@ -251,9 +357,7 @@ const ClubWebsite = () => {
                                 <p className="text-xl text-gray-600">Everything you need to excel in cybersecurity</p>
                             </div>
 
-                            {/* Bento Grid Layout */}
                             <div className="grid grid-cols-1 md:grid-cols-6 gap-6 auto-rows-auto">
-                                {/* CTF Competitions - Large */}
                                 <div className="md:col-span-4 md:row-span-2 group relative bg-gradient-to-br from-purple-600 to-purple-800 rounded-3xl p-10 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden">
                                     <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl"></div>
                                     <div className="absolute bottom-0 left-0 w-48 h-48 opacity-10 rounded-full blur-2xl" style={{ backgroundColor: '#b7d14f' }}></div>
@@ -276,7 +380,6 @@ const ClubWebsite = () => {
                                     </div>
                                 </div>
 
-                                {/* Guest Speakers - Medium */}
                                 <div className="md:col-span-2 group relative bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100">
                                     <div className="w-16 h-16 rounded-2xl mb-6 flex items-center justify-center" style={{ backgroundColor: '#b7d14f' }}>
                                         <MessageSquare className="w-8 h-8 text-gray-900" />
@@ -285,7 +388,6 @@ const ClubWebsite = () => {
                                     <p className="text-gray-600">Learn from industry professionals and cybersecurity experts</p>
                                 </div>
 
-                                {/* Community - Medium */}
                                 <div className="md:col-span-2 group relative bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100">
                                     <div className="w-16 h-16 rounded-2xl mb-6 flex items-center justify-center" style={{ backgroundColor: '#812990' }}>
                                         <Users className="w-8 h-8 text-white" />
@@ -294,7 +396,6 @@ const ClubWebsite = () => {
                                     <p className="text-gray-600">Connect with like-minded individuals in cybersecurity</p>
                                 </div>
 
-                                {/* Workshops - Large */}
                                 <div className="md:col-span-3 md:row-span-2 group relative rounded-3xl p-10 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden" style={{ background: 'linear-gradient(135deg, #b7d14f 0%, #a0c43f 100%)' }}>
                                     <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl"></div>
                                     <div className="absolute bottom-0 left-0 w-48 h-48 bg-black opacity-5 rounded-full blur-2xl"></div>
@@ -317,7 +418,6 @@ const ClubWebsite = () => {
                                     </div>
                                 </div>
 
-                                {/* Certifications - Medium with quote */}
                                 <div className="md:col-span-3 group relative bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden">
                                     <div className="absolute top-0 right-0 w-32 h-32 opacity-10 rounded-full blur-2xl" style={{ backgroundColor: '#b7d14f' }}></div>
                                     <div className="relative z-10">
@@ -333,7 +433,6 @@ const ClubWebsite = () => {
                                     </div>
                                 </div>
 
-                                {/* Weekly Meetups - Small */}
                                 <div className="md:col-span-2 group relative bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100">
                                     <div className="w-16 h-16 rounded-2xl mb-6 flex items-center justify-center" style={{ backgroundColor: '#b7d14f' }}>
                                         <Calendar className="w-8 h-8 text-gray-900" />
@@ -342,19 +441,16 @@ const ClubWebsite = () => {
                                     <p className="text-gray-600">Join regular sessions every Thursday at 6 PM</p>
                                 </div>
 
-                                {/* Stats Card - Tiny accent */}
                                 <div className="md:col-span-1 bg-purple-600 rounded-2xl p-4 shadow-md flex flex-col items-center justify-center">
                                     <div className="text-2xl font-bold text-white">{stats.students}+</div>
                                     <div className="text-purple-200 text-xs text-center">
                                         Students
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
 
-                    {/* CTA Section */}
                     <div className="py-20 bg-gradient-to-br from-purple-600 via-purple-700 to-purple-800 relative overflow-hidden">
                         <div className="absolute inset-0 opacity-10">
                             <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full blur-3xl" style={{ backgroundColor: '#b7d14f' }}></div>
@@ -375,7 +471,6 @@ const ClubWebsite = () => {
                 </div>
             )}
 
-            {/* Team Section */}
             {activeSection === 'team' && (
                 <div className="pt-32 pb-20 bg-gradient-to-b from-gray-50 to-white">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -401,48 +496,125 @@ const ClubWebsite = () => {
                 </div>
             )}
 
-            {/* Events Section */}
             {activeSection === 'events' && (
                 <div className="pt-32 pb-20 bg-gradient-to-b from-gray-50 to-white">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="text-center mb-16">
-                            <h1 className="text-5xl md:text-6xl font-bold mb-4 text-gray-900">Upcoming Events</h1>
-                            <p className="text-xl text-gray-600">Don't miss out on these exciting opportunities</p>
+                            <h1 className="text-5xl md:text-6xl font-bold mb-4 text-gray-900">Events</h1>
+                            <p className="text-xl text-gray-600">Join us for workshops, CTFs, and networking opportunities</p>
                         </div>
 
-                        <div className="space-y-6">
-                            {[1, 2, 3, 4].map((event) => (
-                                <div key={event} className="group bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-purple-200">
-                                    <div className="flex flex-col md:flex-row items-start justify-between gap-6">
-                                        <div className="flex-1">
-                                            <div className="flex items-center space-x-3 mb-4">
-                                                <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ background: 'linear-gradient(135deg, #812990 0%, #9d3ba8 100%)' }}>
-                                                    <Calendar className="w-6 h-6 text-white" />
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-2xl font-bold text-gray-900">Cybersecurity Workshop {event}</h3>
-                                                    <p className="text-gray-500">January {20 + event}, 2025 • 6:00 PM - 8:00 PM</p>
-                                                </div>
-                                            </div>
-                                            <p className="text-gray-600 mb-4">Join us for an intensive hands-on workshop covering the latest techniques in network security, ethical hacking, and threat detection. Perfect for all skill levels.</p>
-                                            <div className="flex flex-wrap gap-2">
-                                                <span className="px-3 py-1 rounded-full text-sm font-medium text-purple-700 bg-purple-100">Workshop</span>
-                                                <span className="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700">In-Person</span>
-                                            </div>
-                                        </div>
-                                        <button className="px-6 py-3 rounded-xl font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 whitespace-nowrap"
-                                            style={{ background: 'linear-gradient(135deg, #812990 0%, #9d3ba8 100%)' }}>
-                                            Register Now
-                                        </button>
-                                    </div>
+                        <div className="mb-24">
+                            <div className="flex items-center space-x-3 mb-8">
+                                <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ background: 'linear-gradient(135deg, #812990 0%, #9d3ba8 100%)' }}>
+                                    <Calendar className="w-6 h-6 text-white" />
                                 </div>
-                            ))}
+                                <h2 className="text-3xl font-bold text-gray-900">Upcoming Events</h2>
+                            </div>
+
+                            <div className="space-y-6">
+                                {eventsData.events
+                                    .filter(event => !isEventPast(event.endDate, event.time))
+                                    .map((event) => (
+                                        <button
+                                            key={event.id}
+                                            onClick={() => setSelectedEvent(event)}
+                                            className="w-full text-left group bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-purple-200 hover:-translate-y-1"
+                                        >
+                                            <div className="flex flex-col md:flex-row items-start justify-between gap-6">
+                                                <div className="flex-1">
+                                                    <div className="flex items-center space-x-3 mb-4">
+                                                        <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ background: 'linear-gradient(135deg, #812990 0%, #9d3ba8 100%)' }}>
+                                                            <Calendar className="w-6 h-6 text-white" />
+                                                        </div>
+                                                        <div>
+                                                            <h3 className="text-2xl font-bold text-gray-900">{event.title}</h3>
+                                                            <p className="text-gray-500">{event.startDate} - {event.endDate} • {event.time}</p>
+                                                        </div>
+                                                    </div>
+                                                    <p className="text-gray-600 mb-4 line-clamp-2">{event.description}</p>
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {event.tags.map((tag, i) => (
+                                                            <span key={i} className="px-3 py-1 rounded-full text-sm font-medium text-purple-700 bg-purple-100">
+                                                                {tag}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <div className="px-6 py-3 rounded-xl font-semibold text-white shadow-lg group-hover:shadow-xl transition-all duration-300"
+                                                    style={{ background: 'linear-gradient(135deg, #812990 0%, #9d3ba8 100%)' }}>
+                                                    Learn More
+                                                </div>
+                                            </div>
+                                        </button>
+                                    ))}
+                            </div>
+
+                            {eventsData.events.filter(event => !isEventPast(event.endDate, event.time)).length === 0 && (
+                                <div className="text-center py-12">
+                                    <p className="text-gray-500 text-lg">No upcoming events at the moment. Check back soon!</p>
+                                </div>
+                            )}
+                        </div>
+
+                        <div>
+                            <div className="flex items-center space-x-3 mb-8">
+                                <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: '#b7d14f' }}>
+                                    <Archive className="w-6 h-6 text-gray-900" />
+                                </div>
+                                <h2 className="text-3xl font-bold text-gray-900">Past Events</h2>
+                            </div>
+
+                            <div className="space-y-6">
+                                {eventsData.events
+                                    .filter(event => isEventPast(event.endDate, event.time))
+                                    .sort((a, b) => new Date(b.endDate) - new Date(a.endDate))
+                                    .map((event) => (
+                                        <button
+                                            key={event.id}
+                                            onClick={() => setSelectedEvent(event)}
+                                            className="w-full text-left group bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-gray-300 opacity-75 hover:opacity-100"
+                                        >
+                                            <div className="flex flex-col md:flex-row items-start justify-between gap-6">
+                                                <div className="flex-1">
+                                                    <div className="flex items-center space-x-3 mb-4">
+                                                        <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: '#b7d14f' }}>
+                                                            <Calendar className="w-6 h-6 text-gray-900" />
+                                                        </div>
+                                                        <div>
+                                                            <h3 className="text-2xl font-bold text-gray-900">{event.title}</h3>
+                                                            <p className="text-gray-500">{event.date} • {event.time}</p>
+                                                        </div>
+                                                    </div>
+                                                    <p className="text-gray-600 mb-4 line-clamp-2">{event.description}</p>
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {event.tags.map((tag, i) => (
+                                                            <span key={i} className="px-3 py-1 rounded-full text-sm font-medium text-gray-600 bg-gray-100">
+                                                                {tag}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <div className="px-6 py-3 rounded-xl font-semibold text-gray-600 shadow-md group-hover:shadow-lg transition-all duration-300 bg-gray-100">
+                                                    View Details
+                                                </div>
+                                            </div>
+                                        </button>
+                                    ))}
+                            </div>
+
+                            {eventsData.events.filter(event => isEventPast(event.endDate, event.time)).length === 0 && (
+                                <div className="text-center py-12">
+                                    <p className="text-gray-500 text-lg">No past events yet.</p>
+                                </div>
+                            )}
                         </div>
                     </div>
+
+                    <EventModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />
                 </div>
             )}
 
-            {/* CTFs Section */}
             {activeSection === 'ctfs' && (
                 <div className="pt-32 pb-20 bg-gradient-to-b from-gray-50 to-white">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -506,11 +678,9 @@ const ClubWebsite = () => {
                 </div>
             )}
 
-            {/* Getting Started Section */}
             {activeSection === 'started' && (
                 <div className="pt-32 pb-20 bg-gradient-to-b from-gray-50 to-white">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        {/* Header */}
                         <div className="text-center mb-16">
                             <h1 className="text-5xl md:text-6xl font-bold mb-6 text-gray-900">Getting Started</h1>
                             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -518,7 +688,6 @@ const ClubWebsite = () => {
                             </p>
                         </div>
 
-                        {/* Social Links */}
                         <div className="flex justify-center gap-6 mb-20">
                             <div className="flex items-start justify-center gap-4">
                                 <a
@@ -583,9 +752,7 @@ const ClubWebsite = () => {
                             </div>
                         </div>
 
-                        {/* Resources Grid */}
                         <div className="space-y-16">
-                            {/* VMs Section */}
                             <div>
                                 <div className="flex items-center space-x-3 mb-8">
                                     <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ background: 'linear-gradient(135deg, #812990 0%, #9d3ba8 100%)' }}>
@@ -610,7 +777,6 @@ const ClubWebsite = () => {
                                 </div>
                             </div>
 
-                            {/* Penetration Testing Tools */}
                             <div>
                                 <div className="flex items-center space-x-3 mb-8">
                                     <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: '#b7d14f' }}>
@@ -638,7 +804,6 @@ const ClubWebsite = () => {
                                 </div>
                             </div>
 
-                            {/* CTF Practice Platforms */}
                             <div>
                                 <div className="flex items-center space-x-3 mb-8">
                                     <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: '#1976d2' }}>
@@ -666,7 +831,6 @@ const ClubWebsite = () => {
                                 </div>
                             </div>
 
-                            {/* Cybersecurity Learning Platforms */}
                             <div>
                                 <div className="flex items-center space-x-3 mb-8">
                                     <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ background: 'linear-gradient(135deg, #b7d14f 0%, #a0c43f 100%)' }}>
@@ -692,7 +856,6 @@ const ClubWebsite = () => {
                                 </div>
                             </div>
 
-                            {/* Guides & References */}
                             <div>
                                 <div className="flex items-center space-x-3 mb-8">
                                     <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: '#FF6B6B' }}>
@@ -720,7 +883,6 @@ const ClubWebsite = () => {
                                 </div>
                             </div>
 
-                            {/* YouTube Channels */}
                             <div>
                                 <div className="flex items-center space-x-3 mb-8">
                                     <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: '#FF0000' }}>
@@ -746,7 +908,6 @@ const ClubWebsite = () => {
                                 </div>
                             </div>
 
-                            {/* CTF Tracking & Communities */}
                             <div>
                                 <div className="flex items-center space-x-3 mb-8">
                                     <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: '#4CAF50' }}>
@@ -771,7 +932,6 @@ const ClubWebsite = () => {
                                 </div>
                             </div>
 
-                            {/* Specialized Topics */}
                             <div>
                                 <div className="flex items-center space-x-3 mb-8">
                                     <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: '#9C27B0' }}>
@@ -798,7 +958,6 @@ const ClubWebsite = () => {
                             </div>
                         </div>
 
-                        {/* CTA Section */}
                         <div className="mt-20 py-16 bg-gradient-to-br from-purple-50 to-green-50 rounded-3xl p-8 md:p-12 border border-purple-100">
                             <div className="text-center">
                                 <h3 className="text-3xl font-bold text-gray-900 mb-4">Ready to Join the Community?</h3>
@@ -818,7 +977,6 @@ const ClubWebsite = () => {
                 </div>
             )}
 
-            {/* Rubric Section */}
             {activeSection === 'rubric' && (
                 <div className="pt-32 pb-20 bg-gradient-to-b from-gray-50 to-white">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -865,8 +1023,7 @@ const ClubWebsite = () => {
                 </div>
             )}
 
-            {/* Other Sections */}
-            {['speakers', 'sponsors'].includes(activeSection) && (
+            {['sponsors'].includes(activeSection) && (
                 <div className="pt-32 pb-20 bg-gradient-to-b from-gray-50 to-white">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <h1 className="text-5xl md:text-6xl font-bold mb-8 text-gray-900">
@@ -879,7 +1036,6 @@ const ClubWebsite = () => {
                 </div>
             )}
 
-            {/* Footer */}
             <footer className="bg-gray-900 text-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                     <div className="text-center">
