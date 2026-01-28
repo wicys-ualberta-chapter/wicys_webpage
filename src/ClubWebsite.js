@@ -4,7 +4,7 @@ import discordIcon from "./assets/discordIcon.jpg";
 import instagramIcon from "./assets/instagramIcon.jpg";
 import linkedinIcon from "./assets/linkedinIcon.png";
 import rubricIcon from "./assets/rubricIcon.png";
-import { Menu, X, Users, Calendar, Trophy, MessageSquare, Award, BookOpen, ChevronRight, Sparkles, Zap, Target, ArrowRight, Clock, MapPin, Archive } from 'lucide-react';
+import { Menu, X, Users, Calendar, Trophy, MessageSquare, Award, BookOpen, Sparkles, Zap, ArrowRight, Clock, MapPin, Archive } from 'lucide-react';
 import eventsData from './data/events.json';
 
 const isEventPast = (dateString, timeString) => {
@@ -142,7 +142,6 @@ const ClubWebsite = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('home');
     const [stats, setStats] = useState({ students: 0, events: 0, community: 0 });
-    const [scrolled, setScrolled] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
 
     useEffect(() => {
